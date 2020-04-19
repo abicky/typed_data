@@ -1,0 +1,17 @@
+{
+  "name": "complex_types_with_simple_union_type",
+  "type": "record",
+  "fields": [
+    {
+      "name": "simple_union",
+      "type": [
+        {
+          "type": "long",
+          "logicalType": "time-micros"
+        },
+        "string",
+        "boolean"
+      ]
+    }
+  ]
+}

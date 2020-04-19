@@ -1,0 +1,32 @@
+{
+  "name": "complex_types_with_union_array",
+  "type": "record",
+  "fields": [
+    {
+      "name": "union_array",
+      "type": {
+        "type": "array",
+        "items": [
+          "null",
+          {
+            "name": "color",
+            "type": "enum",
+            "symbols": ["red", "blue", "green"]
+          },
+          {
+            "type": "array",
+            "items": ["long", "string"]
+          },
+          {
+            "type": "string",
+            "logicalType": "uuid"
+          },
+          {
+            "type": "map",
+            "values": ["long", "string", "null"]
+          }
+        ]
+      }
+    }
+  ]
+}

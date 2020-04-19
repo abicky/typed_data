@@ -1,0 +1,22 @@
+{
+  "name": "records_in_array",
+  "type": "record",
+  "fields": [
+    {
+      "name": "array_field",
+      "type": {
+        "type": "array",
+        "items": {
+          "name": "record_with_int_field",
+          "type": "record",
+          "fields": [
+            {
+              "name": "int_field",
+              "type": "int"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}

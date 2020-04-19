@@ -1,0 +1,49 @@
+{
+  "name": "complex_types_without_union",
+  "type": "record",
+  "fields": [
+    {
+      "name": "record",
+      "type": {
+        "name": "with_int_field",
+        "type": "record",
+        "fields" : [
+          {
+            "name": "int_field",
+            "type": "int"
+          }
+        ]
+      }
+    },
+    {
+      "name": "enum",
+      "type": {
+        "name": "color",
+        "type": "enum",
+        "symbols": ["red", "blue", "green"]
+      }
+    },
+    {
+      "name": "array",
+      "type": {
+        "type": "array",
+        "items": "string"
+      }
+    },
+    {
+      "name": "map",
+      "type": {
+        "type": "map",
+        "values": "string"
+      }
+    },
+    {
+      "name": "fixed",
+      "type": {
+        "name": "md5",
+        "type": "fixed",
+        "size": 16
+      }
+    }
+  ]
+}

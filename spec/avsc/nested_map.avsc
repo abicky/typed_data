@@ -1,0 +1,26 @@
+{
+  "name": "nested_map",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nested_map",
+      "type": {
+        "type": "map",
+        "values": {
+		  "type": "map",
+          "values": "int"
+        }
+      }
+    },
+    {
+      "name": "nested_map_with_union_type",
+      "type": {
+        "type": "map",
+        "values": {
+		  "type": "map",
+          "values": ["int", "string"]
+        }
+      }
+    }
+  ]
+}

@@ -1,8 +1,9 @@
 # TypedData
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/typed_data`. To experiment with that code, run `bin/console` for an interactive prompt.
+![](https://github.com/abicky/ecsmec/workflows/test/badge.svg?branch=master)
 
-TODO: Delete this and the text above, and describe your gem
+TypedData is a library that converts hash objects managed by an Avro schema so that the objects can be loaded into BigQuery.
+
 
 ## Installation
 
@@ -22,7 +23,73 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+```ruby
+require "typed_data"
+
+schema = {
+  "name" => "Record",
+  "type" => "record",
+  "fields" => [
+    {
+      "name" => "int_field",
+      "type" => "int",
+    },
+    {
+      "name" => "int_or_string_field",
+      "type" => ["int", "string"],
+    },
+    {
+      "name" => "array_field",
+      "type" => {
+        "type" => "array",
+        "items" => "int",
+      },
+    },
+    {
+      "name" => "union_type_array_field",
+      "type" => {
+        "type" => "array",
+        "items" => ["int", "string"],
+      },
+    },
+    {
+      "name" => "nested_map_field",
+      "type" => {
+        "type" => "map",
+        "values" => {
+          "type" => "map",
+          "values" => ["int", "string"],
+        },
+      },
+    },
+  ],
+}
+
+converter = TypedData::Converter.new(schema)
+converter.convert({
+  "int_field" => 1,
+  "int_or_string_field" => "string",
+  "array_field" => [1, 2],
+  "union_type_array_field" => [1, "2"],
+  "nested_map_field" => {
+    "nested_map" => {
+      "key1" => 1,
+      "key2" => "2",
+    },
+  },
+})
+# {"int_field"=>1,
+#  "int_or_string_field"=>{"int_value"=>nil, "string_value"=>"string"},
+#  "array_field"=>[1, 2],
+#  "union_type_array_field"=>
+#   [{"int_value"=>"1", "string_value"=>nil},
+#    {"int_value"=>nil, "string_value"=>"2"}],
+#  "nested_map_field"=>
+#   [{"key"=>"nested_map",
+#     "value"=>
+#      [{"key"=>"key1", "value"=>{"int_value"=>"1", "string_value"=>nil}},
+#       {"key"=>"key2", "value"=>{"int_value"=>nil, "string_value"=>"2"}}]}]}
+```
 
 ## Development
 

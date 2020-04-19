@@ -1,0 +1,32 @@
+{
+  "name": "nested_record",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nested_record",
+      "type": {
+        "name": "record_with_int_field",
+        "type": "record",
+        "fields": [
+          {
+            "name": "int_field",
+            "type": "int"
+          }
+        ]
+      }
+    },
+    {
+      "name": "nested_record_with_union_type",
+      "type": {
+        "name": "record_with_union_field",
+        "type": "record",
+        "fields": [
+          {
+            "name": "union_field",
+            "type": ["int", "string"]
+          }
+        ]
+      }
+    }
+  ]
+}

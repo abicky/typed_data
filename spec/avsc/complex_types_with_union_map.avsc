@@ -1,0 +1,28 @@
+{
+  "name": "complex_types_with_union_map",
+  "type": "record",
+  "fields": [
+    {
+      "name": "union_map",
+      "type": {
+        "type": "map",
+        "values": [
+          "null",
+          {
+            "name": "md5",
+            "type": "fixed",
+            "size": 16
+          },
+          {
+            "type": "array",
+            "items": ["long", "string"]
+          },
+          {
+            "type": "map",
+            "values": ["long", "string", "null"]
+          }
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,26 @@
+{
+  "name": "nested_array",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nested_array",
+      "type": {
+        "type": "array",
+        "items": {
+		  "type": "array",
+          "items": "int"
+        }
+      }
+    },
+    {
+      "name": "nested_array_with_union_type",
+      "type": {
+        "type": "array",
+        "items": {
+		  "type": "array",
+          "items": ["int", "string"]
+        }
+      }
+    }
+  ]
+}
