@@ -31,7 +31,7 @@ module TypedData
         when Schema::RecordType
           converted[key] = convert_record(subtype, value)
         when Schema::UnionType
-          converted[key] = convert_union(subtype, value)
+          converted[key] = convert_union(subtype, value, as_record_field: true)
         else
           converted[key] = subtype.coerce(value, formatter: union_type_key_formatter)
         end
@@ -82,24 +82,28 @@ module TypedData
     end
 
     # @param type [UnionType]
+    # @param as_record_field [Boolean]
     # @param map [Object]
-    def convert_union(type, value)
+    def convert_union(type, value, as_record_field: false)
       subtype = type.find_match(value)
       case subtype
       when Schema::ArrayType
-        type.default_value(union_type_key_formatter)
-          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_array(subtype, value))
+        converted_value = convert_array(subtype, value)
       when Schema::MapType
-        type.default_value(union_type_key_formatter)
-          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_map(subtype, value))
+        converted_value = convert_map(subtype, value)
       when Schema::RecordType
-        type.default_value(union_type_key_formatter)
-          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_record(subtype, value))
+        converted_value = convert_record(subtype, value)
       when Schema::UnionType
-        type.default_value(union_type_key_formatter)
-          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_union(subtype, value))
+        converted_value = convert_union(subtype, value)
       else
-        type.coerce(value, formatter: union_type_key_formatter)
+        return type.coerce(value, formatter: union_type_key_formatter)
+      end
+
+      if as_record_field
+        converted_value
+      else
+        type.default_value(union_type_key_formatter)
+          .merge!(union_type_key_formatter.call(subtype.to_s) => converted_value)
       end
     end
   end

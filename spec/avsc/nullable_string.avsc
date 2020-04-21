@@ -1,0 +1,14 @@
+{
+  "name": "nullable_string",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nullable_string1",
+      "type": ["null", "string"]
+    },
+    {
+      "name": "nullable_string2",
+      "type": ["null", "string"]
+    }
+  ]
+}

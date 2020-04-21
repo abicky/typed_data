@@ -1,0 +1,86 @@
+{
+  "name": "nullable_record",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nullable_string_record1",
+      "type": [
+        "null",
+        {
+          "name": "record_with_string_field1",
+          "type": "record",
+          "fields": [
+            {
+              "name": "string_field",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nullable_string_record2",
+      "type": [
+        "null",
+        {
+          "name": "record_with_string_field2",
+          "type": "record",
+          "fields": [
+            {
+              "name": "string_field",
+              "type": "string"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_record1",
+      "type": [
+        "null",
+        {
+          "name": "record_with_union_field1",
+          "type": "record",
+          "fields": [
+            {
+              "name": "union_field",
+              "type": ["int", "string"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_record2",
+      "type": [
+        "null",
+        {
+          "name": "record_with_union_field2",
+          "type": "record",
+          "fields": [
+            {
+              "name": "union_field",
+              "type": ["int", "string"]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_record3",
+      "type": [
+        "null",
+        {
+          "name": "record_with_union_field3",
+          "type": "record",
+          "fields": [
+            {
+              "name": "union_field",
+              "type": ["int", "string"]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

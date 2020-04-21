@@ -1,0 +1,46 @@
+{
+  "name": "nullable_array",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nullable_string_array1",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "string"
+        }
+      ]
+    },
+    {
+      "name": "nullable_string_array2",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": "string"
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_array1",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": ["int", "string"]
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_array2",
+      "type": [
+        "null",
+        {
+          "type": "array",
+          "items": ["int", "string"]
+        }
+      ]
+    }
+  ]
+}

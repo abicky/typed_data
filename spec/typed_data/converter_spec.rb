@@ -133,6 +133,138 @@ RSpec.describe TypedData::Converter do
         it_behaves_like "bigquery record"
       end
 
+      context "with nullable" do
+        context "with nullable primitive" do
+          let(:schema_name) { "nullable_string" }
+
+          let(:data) do
+            {
+              "nullable_string1" => "null",
+              "nullable_string2" => nil,
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "nullable_string1" => "null",
+              "nullable_string2" => nil,
+            })
+          end
+
+          it_behaves_like "bigquery record"
+        end
+
+        context "with nullable record" do
+          let(:schema_name) { "nullable_record" }
+
+          let(:data) do
+            {
+              "nullable_string_record1" => { "string_field" => "1" },
+              "nullable_string_record2" => nil,
+              "nullable_union_record1" => { "union_field" => "1" },
+              "nullable_union_record2" => { "union_field" => 2 },
+              "nullable_union_record3" => nil,
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "nullable_string_record1" => { "string_field" => "1" },
+              "nullable_string_record2" => nil,
+              "nullable_union_record1" => {
+                "union_field" => {
+                  "string_value" => "1",
+                  "int_value" => nil,
+                },
+              },
+              "nullable_union_record2" => {
+                "union_field" => {
+                  "string_value" => nil,
+                  "int_value" => "2",
+                },
+              },
+              "nullable_union_record3" => nil,
+            })
+          end
+
+          it_behaves_like "bigquery record"
+        end
+
+        context "with nullable array" do
+          let(:schema_name) { "nullable_array" }
+
+          let(:data) do
+            {
+              "nullable_string_array1" => ["1"],
+              "nullable_string_array2" => nil,
+              "nullable_union_array1" => ["1", 2],
+              "nullable_union_array2" => nil,
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "nullable_string_array1" => ["1"],
+              "nullable_string_array2" => nil,
+              "nullable_union_array1" => [
+                {
+                  "string_value" => "1",
+                  "int_value" => nil,
+                },
+                {
+                  "string_value" => nil,
+                  "int_value" => "2",
+                },
+              ],
+              "nullable_union_array2" => nil,
+            })
+          end
+
+          it_behaves_like "bigquery record"
+        end
+
+        context "with nullable map" do
+          let(:schema_name) { "nullable_map" }
+
+          let(:data) do
+            {
+              "nullable_string_map1" => { "key1" => "1" },
+              "nullable_string_map2" => nil,
+              "nullable_union_map1" => { "key1" => "1", "key2" => 2 },
+              "nullable_union_map2" => nil,
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "nullable_string_map1" => [
+                { "key" => "key1", "value" => "1" }
+              ],
+              "nullable_string_map2" => nil,
+              "nullable_union_map1" => [
+                {
+                  "key" => "key1",
+                  "value" => {
+                    "string_value" => "1",
+                    "int_value" => nil,
+                  },
+                },
+                {
+                  "key" => "key2",
+                  "value" => {
+                    "string_value" => nil,
+                    "int_value" => "2",
+                  },
+                },
+              ],
+              "nullable_union_map2" => nil,
+            })
+          end
+
+          it_behaves_like "bigquery record"
+        end
+      end
+
       context "with nested record" do
         let(:schema_name) { "nested_record" }
 

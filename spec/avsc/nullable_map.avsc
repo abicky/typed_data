@@ -1,0 +1,46 @@
+{
+  "name": "nullable_map",
+  "type": "record",
+  "fields": [
+    {
+      "name": "nullable_string_map1",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": "string"
+        }
+      ]
+    },
+    {
+      "name": "nullable_string_map2",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": "string"
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_map1",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": ["int", "string"]
+        }
+      ]
+    },
+    {
+      "name": "nullable_union_map2",
+      "type": [
+        "null",
+        {
+          "type": "map",
+          "values": ["int", "string"]
+        }
+      ]
+    }
+  ]
+}

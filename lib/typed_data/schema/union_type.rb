@@ -6,13 +6,16 @@ module TypedData
       # @param types [Array<String>]
       def initialize(types)
         @types = types.map(&Schema.method(:build_type))
+        @nullable_primitive = @types.size == 2 && @types.any?(&:primitive?) && @types.any? { |t| t.is_a?(NullType) }
       end
 
       def to_s
-        "union_#{@types.map(&:to_s).join("_")}"
+        @nullable_primitive ? @types.first.to_s : "union_#{@types.map(&:to_s).join("_")}"
       end
 
       def coerce(value, formatter:)
+        return value if @nullable_primitive
+
         type = find_match(value)
         if type.is_a?(NullType)
           default_value(formatter)
