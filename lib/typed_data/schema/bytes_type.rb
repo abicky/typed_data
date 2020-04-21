@@ -3,7 +3,7 @@
 module TypedData
   class Schema
     class BytesType < Type
-      def coerce(value)
+      def coerce(value, formatter:)
         [value].pack("m0")
       end
 

@@ -3,9 +3,12 @@ require "typed_data/schema"
 
 module TypedData
   class Converter
+    attr_accessor :union_type_key_formatter
+
     # @param schema [Hash] an Avro schema
     def initialize(schema)
       @schema = Schema.new(schema)
+      @union_type_key_formatter = ->(type) { "#{type}_value" }
     end
 
     # @param data [Hash]
@@ -30,7 +33,7 @@ module TypedData
         when Schema::UnionType
           converted[key] = convert_union(subtype, value)
         else
-          converted[key] = subtype.coerce(value)
+          converted[key] = subtype.coerce(value, formatter: union_type_key_formatter)
         end
       end
     end
@@ -52,7 +55,7 @@ module TypedData
         when Schema::UnionType
           ret << convert_union(subtype, value)
         else
-          ret << type.coerce(value)
+          ret << type.coerce(value, formatter: union_type_key_formatter)
         end
       end
     end
@@ -72,7 +75,7 @@ module TypedData
         when Schema::UnionType
           value = convert_union(subtype, value)
         else
-          value = type.coerce(value)
+          value = type.coerce(value, formatter: union_type_key_formatter)
         end
         ret << { "key" => key, "value" => value }
       end
@@ -84,15 +87,19 @@ module TypedData
       subtype = type.find_match(value)
       case subtype
       when Schema::ArrayType
-        type.default_value.merge!("#{subtype}_value" => convert_array(subtype, value))
+        type.default_value(union_type_key_formatter)
+          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_array(subtype, value))
       when Schema::MapType
-        type.default_value.merge!("#{subtype}_value" => convert_map(subtype, value))
+        type.default_value(union_type_key_formatter)
+          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_map(subtype, value))
       when Schema::RecordType
-        type.default_value.merge!("#{subtype}_value" => convert_record(subtype, value))
+        type.default_value(union_type_key_formatter)
+          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_record(subtype, value))
       when Schema::UnionType
-        type.default_value.merge!("#{subtype}_value" => convert_union(subtype, value))
+        type.default_value(union_type_key_formatter)
+          .merge!(union_type_key_formatter.call(subtype.to_s) => convert_union(subtype, value))
       else
-        type.coerce(value)
+        type.coerce(value, formatter: union_type_key_formatter)
       end
     end
   end

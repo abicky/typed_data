@@ -12,7 +12,7 @@ module TypedData
         @name
       end
 
-      def coerce(value)
+      def coerce(value, formatter:)
         value
       end
 

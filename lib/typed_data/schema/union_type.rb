@@ -12,12 +12,12 @@ module TypedData
         "union_#{@types.map(&:to_s).join("_")}"
       end
 
-      def coerce(value)
+      def coerce(value, formatter:)
         type = find_match(value)
         if type.is_a?(NullType)
-          default_value
+          default_value(formatter)
         else
-          default_value.merge!("#{type}_value" => type.coerce(value).to_s)
+          default_value(formatter).merge!(formatter.call(type.to_s) => type.coerce(value, formatter: formatter).to_s)
         end
       end
 
@@ -33,10 +33,10 @@ module TypedData
         @types.any? { |t| t.match?(value) }
       end
 
-      def default_value
+      def default_value(formatter)
         @types.each_with_object({}) do |t, v|
           next if t.is_a?(NullType)
-          v["#{t}_value"] = t.primitive? || t.is_a?(EnumType) ? nil : []
+          v[formatter.call(t.to_s)] = t.primitive? || t.is_a?(EnumType) ? nil : []
         end
       end
     end

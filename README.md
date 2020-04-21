@@ -78,18 +78,39 @@ converter.convert({
     },
   },
 })
-# {"int_field"=>1,
-#  "int_or_string_field"=>{"int_value"=>nil, "string_value"=>"string"},
-#  "array_field"=>[1, 2],
-#  "union_type_array_field"=>
-#   [{"int_value"=>"1", "string_value"=>nil},
-#    {"int_value"=>nil, "string_value"=>"2"}],
-#  "nested_map_field"=>
-#   [{"key"=>"nested_map",
-#     "value"=>
-#      [{"key"=>"key1", "value"=>{"int_value"=>"1", "string_value"=>nil}},
-#       {"key"=>"key2", "value"=>{"int_value"=>nil, "string_value"=>"2"}}]}]}
+#=> {"int_field"=>1,
+#    "int_or_string_field"=>{"int_value"=>nil, "string_value"=>"string"},
+#    "array_field"=>[1, 2],
+#    "union_type_array_field"=>
+#     [{"int_value"=>"1", "string_value"=>nil},
+#      {"int_value"=>nil, "string_value"=>"2"}],
+#    "nested_map_field"=>
+#     [{"key"=>"nested_map",
+#       "value"=>
+#        [{"key"=>"key1", "value"=>{"int_value"=>"1", "string_value"=>nil}},
+#         {"key"=>"key2", "value"=>{"int_value"=>nil, "string_value"=>"2"}}]}]}
 ```
+
+You can specify a formatter for the union type keys. For example, the formatter for tables managed by [Google BigQuery Sink Connector](https://docs.confluent.io/current/connect/kafka-connect-bigquery/index.html) is like below:
+
+```ruby
+schema = {
+  "name" => "Record",
+  "type" => "record",
+  "fields" => [
+    {
+      "name" => "int_or_string_field",
+      "type" => ["int", "string"],
+    },
+  ],
+}
+
+converter = TypedData::Converter.new(schema)
+converter.union_type_key_formatter = ->(type) { type.split("_").first }
+converter.convert({ "int_or_string_field" => "string" })
+#=> {"int_or_string_field"=>{"int"=>nil, "string"=>"string"}}
+```
+
 
 ## Development
 

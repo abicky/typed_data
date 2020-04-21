@@ -291,14 +291,32 @@ RSpec.describe TypedData::Converter do
           }
         end
 
-        it do
-          expect(converted_data).to eq({
-            "simple_union" => {
-              "long_time_micros_value" => nil,
-              "string_value" => "str",
-              "boolean_value" => nil
-            },
-          })
+        context "without formatter" do
+          it do
+            expect(converted_data).to eq({
+              "simple_union" => {
+                "long_time_micros_value" => nil,
+                "string_value" => "str",
+                "boolean_value" => nil
+              },
+            })
+          end
+        end
+
+        context "with formatter" do
+          before do
+            converter.union_type_key_formatter = ->(type) { type.split("_").first }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "simple_union" => {
+                "long" => nil,
+                "string" => "str",
+                "boolean" => nil
+              },
+            })
+          end
         end
 
         it_behaves_like "bigquery record"
