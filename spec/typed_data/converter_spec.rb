@@ -12,10 +12,8 @@ RSpec.describe TypedData::Converter do
       File.read(File.join(__dir__, "..", "avsc", "#{schema_name}.avsc"))
     end
 
-    shared_examples "bigquery record" do
-      it do
-        skip if ENV["GOOGLE_APPLICATION_CREDENTIALS"].nil? || ENV["BIGQUERY_DATASET"].nil?
-
+    shared_examples "converter for BigQuery" do
+      it "converts the argument into data BigQuery can load", bigquery: true do
         require "tempfile"
         require "avro"
         require "google/cloud/bigquery"
@@ -90,7 +88,7 @@ RSpec.describe TypedData::Converter do
         })
       end
 
-      it_behaves_like "bigquery record"
+      it_behaves_like "converter for BigQuery"
     end
 
     context "complex types" do
@@ -130,7 +128,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with nullable" do
@@ -151,7 +149,7 @@ RSpec.describe TypedData::Converter do
             })
           end
 
-          it_behaves_like "bigquery record"
+          it_behaves_like "converter for BigQuery"
         end
 
         context "with nullable record" do
@@ -187,7 +185,7 @@ RSpec.describe TypedData::Converter do
             })
           end
 
-          it_behaves_like "bigquery record"
+          it_behaves_like "converter for BigQuery"
         end
 
         context "with nullable array" do
@@ -220,7 +218,7 @@ RSpec.describe TypedData::Converter do
             })
           end
 
-          it_behaves_like "bigquery record"
+          it_behaves_like "converter for BigQuery"
         end
 
         context "with nullable map" do
@@ -261,7 +259,7 @@ RSpec.describe TypedData::Converter do
             })
           end
 
-          it_behaves_like "bigquery record"
+          it_behaves_like "converter for BigQuery"
         end
       end
 
@@ -293,7 +291,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with nested array" do
@@ -327,7 +325,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with nested map" do
@@ -387,7 +385,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with records in array" do
@@ -411,7 +409,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with simple union type" do
@@ -451,7 +449,7 @@ RSpec.describe TypedData::Converter do
           end
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with union array" do
@@ -536,7 +534,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
 
       context "with union map" do
@@ -620,7 +618,7 @@ RSpec.describe TypedData::Converter do
           })
         end
 
-        it_behaves_like "bigquery record"
+        it_behaves_like "converter for BigQuery"
       end
     end
 
@@ -649,7 +647,7 @@ RSpec.describe TypedData::Converter do
         })
       end
 
-      it_behaves_like "bigquery record"
+      it_behaves_like "converter for BigQuery"
     end
   end
 end

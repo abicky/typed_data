@@ -11,4 +11,8 @@ RSpec.configure do |config|
   config.expect_with :rspec do |c|
     c.syntax = :expect
   end
+
+  if ENV["GOOGLE_APPLICATION_CREDENTIALS"] .nil? || ENV["BIGQUERY_DATASET"].nil?
+    config.filter_run_excluding bigquery: true
+  end
 end
