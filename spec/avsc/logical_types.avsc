@@ -36,6 +36,26 @@
         "type": "long",
         "logicalType": "timestamp-micros"
       }
+    },
+    {
+      "name": "date_array",
+      "type": {
+        "type": "array",
+        "items": {
+          "type": "int",
+          "logicalType": "date"
+        }
+      }
+    },
+    {
+      "name": "date_map",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "int",
+          "logicalType": "date"
+        }
+      }
     }
   ]
 }

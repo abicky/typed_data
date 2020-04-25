@@ -12,10 +12,6 @@ module TypedData
         "map_#{@type}"
       end
 
-      def coerce(value, formatter:)
-        @type.coerce(value, formatter: formatter)
-      end
-
       def primitive?
         false
       end

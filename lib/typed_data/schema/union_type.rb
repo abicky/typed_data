@@ -14,17 +14,6 @@ module TypedData
         @nullable_primitive ? @types.first.to_s : "union_#{@types.map(&:to_s).join("_")}"
       end
 
-      def coerce(value, formatter:)
-        return value if @nullable_primitive
-
-        type = find_match(value)
-        if type.is_a?(NullType)
-          {}
-        else
-          { formatter.call(type.to_s) => type.coerce(value, formatter: formatter).to_s }
-        end
-      end
-
       def primitive?
         false
       end

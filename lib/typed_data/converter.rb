@@ -33,7 +33,7 @@ module TypedData
         when Schema::UnionType
           converted[key] = convert_union(subtype, value)
         else
-          converted[key] = subtype.coerce(value, formatter: union_type_key_formatter)
+          converted[key] = subtype.coerce(value)
         end
       end
     end
@@ -55,7 +55,7 @@ module TypedData
         when Schema::UnionType
           ret << convert_union(subtype, value)
         else
-          ret << type.coerce(value, formatter: union_type_key_formatter)
+          ret << subtype.coerce(value)
         end
       end
     end
@@ -75,7 +75,7 @@ module TypedData
         when Schema::UnionType
           value = convert_union(subtype, value)
         else
-          value = type.coerce(value, formatter: union_type_key_formatter)
+          value = subtype.coerce(value)
         end
         ret << { "key" => key, "value" => value }
       end
@@ -94,12 +94,16 @@ module TypedData
         converted_value = convert_record(subtype, value)
       when Schema::UnionType
         converted_value = convert_union(subtype, value)
+      when Schema::NullType
+        converted_value = nil
       else
-        return type.coerce(value, formatter: union_type_key_formatter)
+        converted_value = subtype.coerce(value).to_s
       end
 
       if type.nullable_single?
         converted_value
+      elsif subtype.is_a?(Schema::NullType)
+        {}
       else
         { union_type_key_formatter.call(subtype.to_s) => converted_value }
       end

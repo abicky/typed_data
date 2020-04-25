@@ -11,7 +11,7 @@ module TypedData
         end
       end
 
-      def coerce(value, formatter:)
+      def coerce(value)
         case @logical_type
         when "date"
           (Date.new(1970, 1, 1) + value).to_s
