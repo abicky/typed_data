@@ -56,6 +56,32 @@
           "logicalType": "date"
         }
       }
+    },
+    {
+      "name": "date_in_date_or_timestamp_millis",
+      "type": [
+        {
+          "type": "int",
+          "logicalType": "date"
+        },
+        {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        }
+      ]
+    },
+    {
+      "name": "timestamp_in_date_or_timestamp_millis",
+      "type": [
+        {
+          "type": "int",
+          "logicalType": "date"
+        },
+        {
+          "type": "long",
+          "logicalType": "timestamp-millis"
+        }
+      ]
     }
   ]
 }

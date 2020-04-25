@@ -671,6 +671,8 @@ RSpec.describe TypedData::Converter do
           "timestamp_micros" => now.to_i * 10**6 + now.nsec / 10**3,
           "date_array" => [(now.to_date - Date.new(1970, 1, 1)).to_i],
           "date_map" => { "today" => (now.to_date - Date.new(1970, 1, 1)).to_i },
+          "date_in_date_or_timestamp_millis" => (now.to_date - Date.new(1970, 1, 1)).to_i,
+          "timestamp_in_date_or_timestamp_millis" => now.to_i * 10**3 + now.nsec / 10**6,
         }
       end
 
@@ -685,6 +687,12 @@ RSpec.describe TypedData::Converter do
           "date_map" => [
             { "key" => "today", "value" => now.strftime("%F") },
           ],
+          "date_in_date_or_timestamp_millis" => {
+            "int_date_value" => now.strftime("%F"),
+          },
+          "timestamp_in_date_or_timestamp_millis" => {
+            "long_timestamp_millis_value" => now.strftime("%F %T.%3N"),
+          },
         })
       end
 

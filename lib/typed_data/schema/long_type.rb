@@ -2,9 +2,7 @@
 
 module TypedData
   class Schema
-    class IntType < Type
-      VALUE_RANGE = -2**31 .. 2**31 - 1
-
+    class LongType < Type
       def to_s
         if @logical_type
           "#{@name}_#{@logical_type.gsub("-", "_")}"
@@ -15,10 +13,12 @@ module TypedData
 
       def coerce(value)
         case @logical_type
-        when "date"
-          (Date.new(1970, 1, 1) + value).to_s
-        when "time-millis"
-          Time.at(value / 1_000, value % 1_000 * 1_000).utc.strftime("%T.%3N")
+        when "time-micros"
+          Time.at(value / 1_000_000, value % 1_000_000).utc.strftime("%T.%6N")
+        when "timestamp-millis"
+          Time.at(value / 1_000, value % 1_000 * 1_000).utc.strftime("%F %T.%3N")
+        when "timestamp-micros"
+          Time.at(value / 1_000_000, value % 1_000_000).utc.strftime("%F %T.%6N")
         else
           value
         end
@@ -29,7 +29,7 @@ module TypedData
       end
 
       def match?(value)
-        value.is_a?(Integer) && VALUE_RANGE.cover?(value)
+        value.is_a?(Integer)
       end
     end
   end

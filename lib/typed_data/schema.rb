@@ -5,6 +5,7 @@ require "typed_data/schema/bytes_type"
 require "typed_data/schema/enum_type"
 require "typed_data/schema/float_type"
 require "typed_data/schema/int_type"
+require "typed_data/schema/long_type"
 require "typed_data/schema/map_type"
 require "typed_data/schema/null_type"
 require "typed_data/schema/record_type"
@@ -48,8 +49,10 @@ module TypedData
           end
         when "boolean"
           BooleanType.new(type, logical_type)
-        when "int", "long"
+        when "int"
           IntType.new(type, logical_type)
+        when "long"
+          LongType.new(type, logical_type)
         when "float", "double"
           FloatType.new(type, logical_type)
         when "bytes"
