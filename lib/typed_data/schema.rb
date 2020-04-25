@@ -42,7 +42,7 @@ module TypedData
             values = type["values"] || type[:values]
             MapType.new(values.is_a?(Array) ? values : [values])
           when "record"
-            RecordType.new(type["fields"] || type[:fields])
+            RecordType.new(type["name"] || type[:name], type["fields"] || type[:fields])
           else
             raise UnsupportedType, "Unknown type: #{subtype}"
           end
@@ -72,7 +72,7 @@ module TypedData
       if (schema["type"] || schema[:type]) != "record"
         raise UnsupportedType, 'The root type must be "record"'
       end
-      @root_type = RecordType.new(schema["fields"] || schema[:fields])
+      @root_type = RecordType.new(schema["name"] || schema[:name], schema["fields"] || schema[:fields])
     end
   end
 end

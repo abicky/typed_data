@@ -1,0 +1,30 @@
+{
+  "name": "complex_types_with_complex_union_type",
+  "type": "record",
+  "fields": [
+    {
+      "name": "complex_union",
+      "type": [
+        "string",
+        {
+          "name": "with_int_field",
+          "type": "record",
+          "fields" : [
+            {
+              "name": "int_field",
+              "type": "int"
+            }
+          ]
+        },
+        {
+          "type": "array",
+          "items": "string"
+        },
+        {
+          "type": "map",
+          "values": "string"
+        }
+      ]
+    }
+  ]
+}

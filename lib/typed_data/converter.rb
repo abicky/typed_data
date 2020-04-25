@@ -31,7 +31,7 @@ module TypedData
         when Schema::RecordType
           converted[key] = convert_record(subtype, value)
         when Schema::UnionType
-          converted[key] = convert_union(subtype, value, as_record_field: true)
+          converted[key] = convert_union(subtype, value)
         else
           converted[key] = subtype.coerce(value, formatter: union_type_key_formatter)
         end
@@ -82,9 +82,8 @@ module TypedData
     end
 
     # @param type [UnionType]
-    # @param as_record_field [Boolean]
     # @param map [Object]
-    def convert_union(type, value, as_record_field: false)
+    def convert_union(type, value)
       subtype = type.find_match(value)
       case subtype
       when Schema::ArrayType
@@ -99,7 +98,7 @@ module TypedData
         return type.coerce(value, formatter: union_type_key_formatter)
       end
 
-      if as_record_field
+      if type.nullable_single?
         converted_value
       else
         { union_type_key_formatter.call(subtype.to_s) => converted_value }

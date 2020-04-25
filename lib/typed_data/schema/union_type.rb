@@ -6,7 +6,8 @@ module TypedData
       # @param types [Array<String>]
       def initialize(types)
         @types = types.map(&Schema.method(:build_type))
-        @nullable_primitive = @types.size == 2 && @types.any?(&:primitive?) && @types.any? { |t| t.is_a?(NullType) }
+        @nullable_single = @types.size == 2 && @types.any? { |t| t.is_a?(NullType) }
+        @nullable_primitive = @nullable_single && @types.any?(&:primitive?)
       end
 
       def to_s
@@ -34,6 +35,10 @@ module TypedData
 
       def match?(value)
         @types.any? { |t| t.match?(value) }
+      end
+
+      def nullable_single?
+        @nullable_single
       end
     end
   end

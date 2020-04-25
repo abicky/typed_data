@@ -4,7 +4,8 @@ module TypedData
   class Schema
     class RecordType < Type
       # @param fields [Array] an array of "fields" in an Avro schema
-      def initialize(fields)
+      def initialize(name, fields)
+        @name = name
         @field_to_type = fields.each_with_object({}) do |field, h|
           h[field["name"] || field[:name]] = Schema.build_type(field["type"] || field[:type])
         end
@@ -22,7 +23,7 @@ module TypedData
       end
 
       def match?(value)
-        value.is_a?(Hash)
+        value.is_a?(Hash) && value.all? { |k, v| @field_to_type[k]&.match?(v) }
       end
     end
   end

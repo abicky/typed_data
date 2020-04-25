@@ -437,6 +437,88 @@ RSpec.describe TypedData::Converter do
         it_behaves_like "converter for BigQuery"
       end
 
+      context "with complex union type" do
+        let(:schema_name) { "complex_types_with_complex_union_type" }
+
+        context "with string value" do
+          let(:data) do
+            {
+              "complex_union" => "str",
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "complex_union" => {
+                "string_value" => "str"
+              },
+            })
+          end
+
+          it_behaves_like "converter for BigQuery"
+        end
+
+        context "with record value" do
+          let(:data) do
+            {
+              "complex_union" => {
+                "int_field" => 1,
+              }
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "complex_union" => {
+                "with_int_field_value" => {
+                  "int_field" => 1
+                },
+              },
+            })
+          end
+
+          it_behaves_like "converter for BigQuery"
+        end
+
+        context "with array value" do
+          let(:data) do
+            {
+              "complex_union" => ["1"],
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "complex_union" => {
+                "array_string_value" => ["1"],
+              },
+            })
+          end
+
+          it_behaves_like "converter for BigQuery"
+        end
+
+        context "with map value" do
+          let(:data) do
+            {
+              "complex_union" => { "a" => "1" },
+            }
+          end
+
+          it do
+            expect(converted_data).to eq({
+              "complex_union" => {
+                "map_string_value" => [
+                  { "key" => "a", "value" => "1"},
+                ],
+              },
+            })
+          end
+
+          it_behaves_like "converter for BigQuery"
+        end
+      end
+
       context "with union array" do
         let(:schema_name) { "complex_types_with_union_array" }
 
