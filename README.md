@@ -79,36 +79,42 @@ converter.convert({
   },
 })
 #=> {"int_field"=>1,
-#    "int_or_string_field"=>{"int_value"=>nil, "string_value"=>"string"},
+#    "int_or_string_field"=>{"string_value"=>"string"},
 #    "array_field"=>[1, 2],
-#    "union_type_array_field"=>
-#     [{"int_value"=>"1", "string_value"=>nil},
-#      {"int_value"=>nil, "string_value"=>"2"}],
+#    "union_type_array_field"=>[{"int_value"=>"1"}, {"string_value"=>"2"}],
 #    "nested_map_field"=>
 #     [{"key"=>"nested_map",
 #       "value"=>
-#        [{"key"=>"key1", "value"=>{"int_value"=>"1", "string_value"=>nil}},
-#         {"key"=>"key2", "value"=>{"int_value"=>nil, "string_value"=>"2"}}]}]}
+#        [{"key"=>"key1", "value"=>{"int_value"=>"1"}},
+#         {"key"=>"key2", "value"=>{"string_value"=>"2"}}]}]}
 ```
 
 You can specify a formatter for the union type keys. For example, the formatter for tables managed by [Google BigQuery Sink Connector](https://docs.confluent.io/current/connect/kafka-connect-bigquery/index.html) is like below:
 
 ```ruby
-schema = {
-  "name" => "Record",
-  "type" => "record",
-  "fields" => [
-    {
-      "name" => "int_or_string_field",
-      "type" => ["int", "string"],
-    },
-  ],
-}
-
 converter = TypedData::Converter.new(schema)
 converter.union_type_key_formatter = ->(type) { type.split("_").first }
-converter.convert({ "int_or_string_field" => "string" })
-#=> {"int_or_string_field"=>{"int"=>nil, "string"=>"string"}}
+converter.convert({
+  "int_field" => 1,
+  "int_or_string_field" => "string",
+  "array_field" => [1, 2],
+  "union_type_array_field" => [1, "2"],
+  "nested_map_field" => {
+    "nested_map" => {
+      "key1" => 1,
+      "key2" => "2",
+    },
+  },
+})
+#=> {"int_field"=>1,
+#    "int_or_string_field"=>{"string"=>"string"},
+#    "array_field"=>[1, 2],
+#    "union_type_array_field"=>[{"int"=>"1"}, {"string"=>"2"}],
+#    "nested_map_field"=>
+#     [{"key"=>"nested_map",
+#       "value"=>
+#        [{"key"=>"key1", "value"=>{"int"=>"1"}},
+#         {"key"=>"key2", "value"=>{"string"=>"2"}}]}]}
 ```
 
 

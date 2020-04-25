@@ -172,12 +172,10 @@ RSpec.describe TypedData::Converter do
               "nullable_union_record1" => {
                 "union_field" => {
                   "string_value" => "1",
-                  "int_value" => nil,
                 },
               },
               "nullable_union_record2" => {
                 "union_field" => {
-                  "string_value" => nil,
                   "int_value" => "2",
                 },
               },
@@ -207,10 +205,8 @@ RSpec.describe TypedData::Converter do
               "nullable_union_array1" => [
                 {
                   "string_value" => "1",
-                  "int_value" => nil,
                 },
                 {
-                  "string_value" => nil,
                   "int_value" => "2",
                 },
               ],
@@ -244,13 +240,11 @@ RSpec.describe TypedData::Converter do
                   "key" => "key1",
                   "value" => {
                     "string_value" => "1",
-                    "int_value" => nil,
                   },
                 },
                 {
                   "key" => "key2",
                   "value" => {
-                    "string_value" => nil,
                     "int_value" => "2",
                   },
                 },
@@ -285,7 +279,6 @@ RSpec.describe TypedData::Converter do
             "nested_record_with_union_type" => {
               "union_field" => {
                 "int_value" => "1",
-                "string_value" => nil,
               }
             }
           })
@@ -315,10 +308,8 @@ RSpec.describe TypedData::Converter do
             "nested_array_with_union_type" => [
               {
                 "int_value" => "1",
-                "string_value" => nil,
               },
               {
-                "int_value" => nil,
                 "string_value" => "2",
               },
             ],
@@ -370,13 +361,11 @@ RSpec.describe TypedData::Converter do
                   "key" => "key1",
                   "value" => {
                     "int_value" => "1",
-                    "string_value" => nil,
                   },
                 },
                 {
                   "key" => "key2",
                   "value" => {
-                    "int_value" => nil,
                     "string_value" => "2",
                   },
                 },
@@ -425,9 +414,7 @@ RSpec.describe TypedData::Converter do
           it do
             expect(converted_data).to eq({
               "simple_union" => {
-                "long_time_micros_value" => nil,
                 "string_value" => "str",
-                "boolean_value" => nil
               },
             })
           end
@@ -441,9 +428,7 @@ RSpec.describe TypedData::Converter do
           it do
             expect(converted_data).to eq({
               "simple_union" => {
-                "long" => nil,
                 "string" => "str",
-                "boolean" => nil
               },
             })
           end
@@ -476,59 +461,40 @@ RSpec.describe TypedData::Converter do
           expect(converted_data).to eq({
             "union_array" => [
               {
-                "array_union_long_string_value" => [],
                 "color_value" => "red",
-                "map_union_long_string_null_value" => [],
-                "string_value" => nil,
               },
               {
                 "array_union_long_string_value" => [
                   {
                     "long_value" => "1",
-                    "string_value" => nil
                   },
                   {
-                    "long_value" => nil,
                     "string_value" => "2",
                   },
                 ],
-                "color_value" => nil,
-                "map_union_long_string_null_value" => [],
-                "string_value" => nil
               },
               {
-                "array_union_long_string_value" => [],
-                "color_value" => nil,
-                "map_union_long_string_null_value" => [],
                 "string_value" => uuid,
               },
               {
-                "array_union_long_string_value" => [],
-                "color_value" => nil,
                 "map_union_long_string_null_value" => [
                   {
                     "key" => "a",
                     "value" => {
                       "long_value" => "1",
-                      "string_value" => nil
                     },
                   },
                   {
                     "key" => "b",
-                    "value" => {
-                      "long_value" => nil,
-                      "string_value" => nil,
-                    },
+                    "value" => {},
                   },
                   {
                     "key" => "c",
                     "value" => {
-                      "long_value" => nil,
                       "string_value" => "3",
                     },
                   },
                 ],
-                "string_value" => nil,
               },
             ],
           })
@@ -563,51 +529,38 @@ RSpec.describe TypedData::Converter do
                 "key" => "md5",
                 "value" => {
                   "md5_value" => [md5].pack("m0"),
-                  "array_union_long_string_value" => [],
-                  "map_union_long_string_null_value" => [],
                 },
               },
               {
                 "key" => "array",
                 "value" => {
-                  "md5_value" => nil,
                   "array_union_long_string_value" => [
                     {
                       "long_value" => "1",
-                      "string_value" => nil
                     },
                     {
-                      "long_value" => nil,
                       "string_value" => "2",
                     },
                   ],
-                  "map_union_long_string_null_value" => [],
                 },
               },
               {
                 "key" => "map",
                 "value" => {
-                  "md5_value" => nil,
-                  "array_union_long_string_value" => [],
                   "map_union_long_string_null_value" => [
                     {
                       "key" => "a",
                       "value" => {
                         "long_value" => "1",
-                        "string_value" => nil
                       },
                     },
                     {
                       "key" => "b",
-                      "value" => {
-                        "long_value" => nil,
-                        "string_value" => nil,
-                      },
+                      "value" => {},
                     },
                     {
                       "key" => "c",
                       "value" => {
-                        "long_value" => nil,
                         "string_value" => "3",
                       },
                     },

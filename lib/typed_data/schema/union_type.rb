@@ -18,9 +18,9 @@ module TypedData
 
         type = find_match(value)
         if type.is_a?(NullType)
-          default_value(formatter)
+          {}
         else
-          default_value(formatter).merge!(formatter.call(type.to_s) => type.coerce(value, formatter: formatter).to_s)
+          { formatter.call(type.to_s) => type.coerce(value, formatter: formatter).to_s }
         end
       end
 
@@ -34,13 +34,6 @@ module TypedData
 
       def match?(value)
         @types.any? { |t| t.match?(value) }
-      end
-
-      def default_value(formatter)
-        @types.each_with_object({}) do |t, v|
-          next if t.is_a?(NullType)
-          v[formatter.call(t.to_s)] = t.primitive? || t.is_a?(EnumType) ? nil : []
-        end
       end
     end
   end

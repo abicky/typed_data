@@ -102,8 +102,7 @@ module TypedData
       if as_record_field
         converted_value
       else
-        type.default_value(union_type_key_formatter)
-          .merge!(union_type_key_formatter.call(subtype.to_s) => converted_value)
+        { union_type_key_formatter.call(subtype.to_s) => converted_value }
       end
     end
   end
