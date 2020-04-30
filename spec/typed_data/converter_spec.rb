@@ -698,5 +698,51 @@ RSpec.describe TypedData::Converter do
 
       it_behaves_like "converter for BigQuery"
     end
+
+    context "with invalid data" do
+      context "with unknown record field" do
+        let(:schema_name) { "primitive_types" }
+
+        let(:data) do
+          {
+            "unknown_field" => nil,
+          }
+        end
+
+        it do
+          expect { converted_data }.to raise_error(TypedData::Schema::UnknownField)
+        end
+      end
+
+      context "with invalid union type value" do
+        let(:schema_name) { "nullable_string" }
+
+        let(:data) do
+          {
+            "nullable_string1" => 1,
+          }
+        end
+
+        it do
+          expect { converted_data }.to raise_error(TypedData::Schema::InvalidValue)
+        end
+      end
+
+      context "with invalid record type value" do
+        let(:schema_name) { "records_in_array" }
+
+        let(:data) do
+          {
+            "array_field" => [
+              { int_field: 1 },
+            ],
+          }
+        end
+
+        it do
+          expect { converted_data }.to raise_error(TypedData::Schema::InvalidValue)
+        end
+      end
+    end
   end
 end

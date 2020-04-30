@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+require "typed_data/schema/errors"
 
 module TypedData
   class Schema
@@ -19,7 +20,8 @@ module TypedData
       end
 
       def find_match(value)
-        @types.find { |t| t.match?(value) }
+        @types.find { |t| t.match?(value) } or
+          raise InvalidValue, %Q{the value #{value.inspect} doesn't match the type #{@types.map(&:to_s)}}
       end
 
       def match?(value)

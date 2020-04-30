@@ -11,12 +11,10 @@ require "typed_data/schema/null_type"
 require "typed_data/schema/record_type"
 require "typed_data/schema/string_type"
 require "typed_data/schema/union_type"
+require "typed_data/schema/errors"
 
 module TypedData
   class Schema
-    class UnknownField < StandardError; end
-    class UnsupportedType < StandardError; end
-
     class << self
       def build_type(type, logical_type = nil)
         type = type.first if type.is_a?(Array) && type.size == 1

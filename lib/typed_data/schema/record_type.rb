@@ -22,6 +22,10 @@ module TypedData
         end
       end
 
+      def find_match(value)
+        raise InvalidValue, %Q{the value #{value.inspect} doesn't match the type #{self}}
+      end
+
       def match?(value)
         value.is_a?(Hash) && value.all? { |k, v| @field_to_type[k]&.match?(v) }
       end
