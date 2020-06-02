@@ -1,5 +1,5 @@
 {
-  "name": "nullable_string",
+  "name": "nullable_primitives",
   "type": "record",
   "fields": [
     {
@@ -9,6 +9,14 @@
     {
       "name": "nullable_string2",
       "type": ["null", "string"]
+    },
+    {
+      "name": "nullable_int1",
+      "type": ["null", "int"]
+    },
+    {
+      "name": "nullable_int2",
+      "type": ["null", "int"]
     }
   ]
 }

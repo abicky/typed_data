@@ -97,7 +97,11 @@ module TypedData
       when Schema::NullType
         converted_value = nil
       else
-        converted_value = subtype.coerce(value).to_s
+        if type.nullable_single?
+          converted_value = subtype.coerce(value)
+        else
+          converted_value = subtype.coerce(value).to_s
+        end
       end
 
       if type.nullable_single?

@@ -133,12 +133,14 @@ RSpec.describe TypedData::Converter do
 
       context "with nullable" do
         context "with nullable primitive" do
-          let(:schema_name) { "nullable_string" }
+          let(:schema_name) { "nullable_primitives" }
 
           let(:data) do
             {
               "nullable_string1" => "null",
               "nullable_string2" => nil,
+              "nullable_int1" => 1,
+              "nullable_int2" => nil,
             }
           end
 
@@ -146,6 +148,8 @@ RSpec.describe TypedData::Converter do
             expect(converted_data).to eq({
               "nullable_string1" => "null",
               "nullable_string2" => nil,
+              "nullable_int1" => 1,
+              "nullable_int2" => nil,
             })
           end
 
@@ -715,7 +719,7 @@ RSpec.describe TypedData::Converter do
       end
 
       context "with invalid union type value" do
-        let(:schema_name) { "nullable_string" }
+        let(:schema_name) { "nullable_primitives" }
 
         let(:data) do
           {
