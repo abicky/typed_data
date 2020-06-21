@@ -1,6 +1,6 @@
 # TypedData
 
-![](https://github.com/abicky/ecsmec/workflows/test/badge.svg?branch=master)
+![](https://github.com/abicky/typed_data/workflows/CI/badge.svg?branch=master)
 
 TypedData is a library that converts hash objects managed by an Avro schema so that the objects can be loaded into BigQuery.
 
