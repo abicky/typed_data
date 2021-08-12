@@ -3,6 +3,8 @@
 module TypedData
   class Schema
     class LongType < Type
+      SUPPORTED_LOGICAL_TYPES = %w[time-micros timestamp-millis timestamp-micros]
+
       def to_s
         if @logical_type
           "#{@name}_#{@logical_type.gsub("-", "_")}"
