@@ -25,16 +25,24 @@ RSpec.describe TypedData::Converter do
           dw << data
           dw.close
 
-          bigquery = Google::Cloud::Bigquery.new
-          dataset = bigquery.dataset(ENV["BIGQUERY_DATASET"])
-          dataset.load(schema_name, f.path, format: "avro", write: "truncate") do |updater|
-            updater.gapi.configuration.load.use_avro_logical_types = true
+          dataset = Google::Cloud::Bigquery.new.dataset(ENV["BIGQUERY_DATASET"])
+
+          threads = []
+          threads << Thread.new do
+            dataset.load(schema_name, f.path, format: "avro", write: "truncate") do |updater|
+              updater.gapi.configuration.load.use_avro_logical_types = true
+            end
           end
 
-          Tempfile.open("converted") do |jsonl|
-            jsonl.puts(converter.convert(data).compact.to_json)
-            dataset.load(schema_name, jsonl, format: "json")
+          threads << Thread.new do
+            Tempfile.open("converted") do |jsonl|
+              jsonl.puts(converter.convert(data).compact.to_json)
+              Google::Cloud::Bigquery.new.dataset(ENV["BIGQUERY_DATASET"]).
+                load(schema_name, jsonl, format: "json")
+            end
           end
+
+          threads.each(&:join)
 
           result = dataset.query("SELECT * FROM #{schema_name}")
 
