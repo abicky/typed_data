@@ -81,11 +81,11 @@ converter.convert({
 #=> {"int_field"=>1,
 #    "int_or_string_field"=>{"string_value"=>"string"},
 #    "array_field"=>[1, 2],
-#    "union_type_array_field"=>[{"int_value"=>"1"}, {"string_value"=>"2"}],
+#    "union_type_array_field"=>[{"int_value"=>1}, {"string_value"=>"2"}],
 #    "nested_map_field"=>
 #     [{"key"=>"nested_map",
 #       "value"=>
-#        [{"key"=>"key1", "value"=>{"int_value"=>"1"}},
+#        [{"key"=>"key1", "value"=>{"int_value"=>1}},
 #         {"key"=>"key2", "value"=>{"string_value"=>"2"}}]}]}
 ```
 
@@ -109,11 +109,11 @@ converter.convert({
 #=> {"int_field"=>1,
 #    "int_or_string_field"=>{"string"=>"string"},
 #    "array_field"=>[1, 2],
-#    "union_type_array_field"=>[{"int"=>"1"}, {"string"=>"2"}],
+#    "union_type_array_field"=>[{"int"=>1}, {"string"=>"2"}],
 #    "nested_map_field"=>
 #     [{"key"=>"nested_map",
 #       "value"=>
-#        [{"key"=>"key1", "value"=>{"int"=>"1"}},
+#        [{"key"=>"key1", "value"=>{"int"=>1}},
 #         {"key"=>"key2", "value"=>{"string"=>"2"}}]}]}
 ```
 
