@@ -180,7 +180,7 @@ RSpec.describe TypedData::Converter do
               },
               "nullable_union_record2" => {
                 "union_field" => {
-                  "int_value" => "2",
+                  "int_value" => 2,
                 },
               },
               "nullable_union_record3" => nil,
@@ -211,7 +211,7 @@ RSpec.describe TypedData::Converter do
                   "string_value" => "1",
                 },
                 {
-                  "int_value" => "2",
+                  "int_value" => 2,
                 },
               ],
               "nullable_union_array2" => nil,
@@ -249,7 +249,7 @@ RSpec.describe TypedData::Converter do
                 {
                   "key" => "key2",
                   "value" => {
-                    "int_value" => "2",
+                    "int_value" => 2,
                   },
                 },
               ],
@@ -282,7 +282,7 @@ RSpec.describe TypedData::Converter do
             },
             "nested_record_with_union_type" => {
               "union_field" => {
-                "int_value" => "1",
+                "int_value" => 1,
               }
             }
           })
@@ -311,7 +311,7 @@ RSpec.describe TypedData::Converter do
             "nested_array" => [1, 2],
             "nested_array_with_union_type" => [
               {
-                "int_value" => "1",
+                "int_value" => 1,
               },
               {
                 "string_value" => "2",
@@ -364,7 +364,7 @@ RSpec.describe TypedData::Converter do
                 {
                   "key" => "key1",
                   "value" => {
-                    "int_value" => "1",
+                    "int_value" => 1,
                   },
                 },
                 {
@@ -552,7 +552,7 @@ RSpec.describe TypedData::Converter do
               {
                 "array_union_long_string_value" => [
                   {
-                    "long_value" => "1",
+                    "long_value" => 1,
                   },
                   {
                     "string_value" => "2",
@@ -567,7 +567,7 @@ RSpec.describe TypedData::Converter do
                   {
                     "key" => "a",
                     "value" => {
-                      "long_value" => "1",
+                      "long_value" => 1,
                     },
                   },
                   {
@@ -622,7 +622,7 @@ RSpec.describe TypedData::Converter do
                 "value" => {
                   "array_union_long_string_value" => [
                     {
-                      "long_value" => "1",
+                      "long_value" => 1,
                     },
                     {
                       "string_value" => "2",
@@ -637,7 +637,7 @@ RSpec.describe TypedData::Converter do
                     {
                       "key" => "a",
                       "value" => {
-                        "long_value" => "1",
+                        "long_value" => 1,
                       },
                     },
                     {
