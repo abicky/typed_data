@@ -11,17 +11,16 @@ module TypedData
         @nullable_primitive = @nullable_single && @types.any?(&:primitive?)
       end
 
+      def accept(visitor, value)
+        visitor.visit_union(self, @types, value)
+      end
+
       def to_s
         @nullable_primitive ? @types.first.to_s : "union_#{@types.map(&:to_s).join("_")}"
       end
 
       def primitive?
         false
-      end
-
-      def find_match(value)
-        @types.find { |t| t.match?(value) } or
-          raise InvalidValue, %Q{the value #{value.inspect} doesn't match the type #{@types.map(&:to_s)}}
       end
 
       def match?(value)

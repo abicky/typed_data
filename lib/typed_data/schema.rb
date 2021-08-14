@@ -70,10 +70,7 @@ module TypedData
     # @param schema [Hash] an Avro schema
     def initialize(schema)
       @schema = schema
-      if (schema["type"] || schema[:type]) != "record"
-        raise UnsupportedType, 'The root type must be "record"'
-      end
-      @root_type = RecordType.new(schema["name"] || schema[:name], schema["fields"] || schema[:fields])
+      @root_type = Schema.build_type(schema)
     end
   end
 end

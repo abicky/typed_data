@@ -14,12 +14,12 @@ module TypedData
         @logical_type = logical_type
       end
 
-      def to_s
-        @name
+      def accept(visitor, value)
+        visitor.visit(self, value)
       end
 
-      def coerce(value)
-        value
+      def to_s
+        @name
       end
 
       def primitive?

@@ -11,6 +11,10 @@ module TypedData
         end
       end
 
+      def accept(visitor, value)
+        visitor.visit_record(self, value)
+      end
+
       def primitive?
         false
       end
@@ -20,10 +24,6 @@ module TypedData
         @field_to_type.fetch(field_name.to_s) do
           raise UnknownField, "Unknown field \"#{field_name}\""
         end
-      end
-
-      def find_match(value)
-        raise InvalidValue, %Q{the value #{value.inspect} doesn't match the type #{self}}
       end
 
       def match?(value)

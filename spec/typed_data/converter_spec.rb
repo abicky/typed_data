@@ -306,23 +306,27 @@ RSpec.describe TypedData::Converter do
           {
             "nested_array" => [
               [1, 2],
+              [3],
             ],
             "nested_array_with_union_type" => [
               [1, "2"],
+              [3],
             ],
           }
         end
 
         it do
-          # BigQuery doesn't seem to support nested array
           expect(converted_data).to eq({
-            "nested_array" => [1, 2],
+            "nested_array" => [1, 2, 3],
             "nested_array_with_union_type" => [
               {
                 "int_value" => 1,
               },
               {
                 "string_value" => "2",
+              },
+              {
+                "int_value" => 3,
               },
             ],
           })
@@ -732,22 +736,6 @@ RSpec.describe TypedData::Converter do
         let(:data) do
           {
             "nullable_string1" => 1,
-          }
-        end
-
-        it do
-          expect { converted_data }.to raise_error(TypedData::Schema::InvalidValue)
-        end
-      end
-
-      context "with invalid record type value" do
-        let(:schema_name) { "records_in_array" }
-
-        let(:data) do
-          {
-            "array_field" => [
-              { int_field: 1 },
-            ],
           }
         end
 

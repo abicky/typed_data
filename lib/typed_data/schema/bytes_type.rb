@@ -3,8 +3,8 @@
 module TypedData
   class Schema
     class BytesType < Type
-      def coerce(value)
-        [value].pack("m0")
+      def accept(visitor, value)
+        visitor.visit_bytes(self, value)
       end
 
       def primitive?
