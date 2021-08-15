@@ -3,11 +3,12 @@
 module TypedData
   class Schema
     class RecordType < Type
+      # @param name [String]
       # @param fields [Array] an array of "fields" in an Avro schema
       def initialize(name, fields)
         @name = name
         @field_to_type = fields.each_with_object({}) do |field, h|
-          h[field["name"] || field[:name]] = Schema.build_type(field["type"] || field[:type])
+          h[field[:name]] = Schema.build_type(field[:type])
         end
       end
 

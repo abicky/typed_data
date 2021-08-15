@@ -16,6 +16,8 @@ require "typed_data/schema/errors"
 module TypedData
   class Schema
     class << self
+      # @param type [String, Hash{Symbol => Object}, Array<Hash{Symbol => Object}>]
+      # @param logical_type [String, nil]
       def build_type(type, logical_type = nil)
         type = type.first if type.is_a?(Array) && type.size == 1
 
@@ -23,27 +25,26 @@ module TypedData
         when Array
           UnionType.new(type)
         when Hash
-          subtype = type["type"] || type[:type]
-          logical_type = type["logicalType"] || type[:logicalType]
-          if logical_type
-            return build_type(subtype, logical_type)
+          actual_type = type[:type]
+          if type[:logicalType]
+            return build_type(actual_type, type[:logicalType])
           end
 
-          case subtype
+          case actual_type
           when "enum"
-            EnumType.new(type["name"] || type[:name], type["symbols"] || type[:symbols])
+            EnumType.new(type[:name], type[:symbols])
           when "fixed"
-            BytesType.new(type["name"] || type[:name] || "bytes")
+            BytesType.new(type[:name] || "bytes")
           when "array"
-            items = type["items"] || type[:items]
+            items = type[:items]
             ArrayType.new(items.is_a?(Array) ? items : [items])
           when "map"
-            values = type["values"] || type[:values]
+            values = type[:values]
             MapType.new(values.is_a?(Array) ? values : [values])
           when "record"
-            RecordType.new(type["name"] || type[:name], type["fields"] || type[:fields])
+            RecordType.new(type[:name], type[:fields])
           else
-            raise UnsupportedType, "Unknown type: #{subtype}"
+            raise UnsupportedType, "Unknown type: #{actual_type}"
           end
         when "boolean"
           BooleanType.new(type, logical_type)
@@ -69,8 +70,25 @@ module TypedData
 
     # @param schema [Hash] an Avro schema
     def initialize(schema)
-      @schema = schema
-      @root_type = Schema.build_type(schema)
+      @schema = deep_symbolize_keys(schema)
+      @root_type = Schema.build_type(@schema)
+    end
+
+    private
+
+    # @param hash [Object]
+    # @return [Object] an object with symbolized keys
+    def deep_symbolize_keys(o)
+      case o
+      when Array
+        o.map(&method(:deep_symbolize_keys))
+      when Hash
+        o.each_with_object({}) do |(k, v), h|
+          h[k.to_sym] = deep_symbolize_keys(v)
+        end
+      else
+        o
+      end
     end
   end
 end

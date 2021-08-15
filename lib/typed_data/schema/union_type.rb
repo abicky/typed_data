@@ -8,7 +8,7 @@ module TypedData
       def initialize(types)
         @types = types.map(&Schema.method(:build_type))
         @nullable_single = @types.size == 2 && @types.any? { |t| t.is_a?(NullType) }
-        @nullable_primitive = @nullable_single && @types.any?(&:primitive?)
+        @nullable_primitive_type = @types.find(&:primitive?) if @nullable_single
       end
 
       def accept(visitor, value)
@@ -16,7 +16,7 @@ module TypedData
       end
 
       def to_s
-        @nullable_primitive ? @types.first.to_s : "union_#{@types.map(&:to_s).join("_")}"
+        @nullable_primitive_type&.to_s || "union_#{@types.map(&:to_s).join("_")}"
       end
 
       def primitive?
