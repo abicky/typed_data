@@ -117,6 +117,41 @@ converter.convert({
 #         {"key"=>"key2", "value"=>{"string"=>"2"}}]}]}
 ```
 
+`TypedData::Restorer` enables you to restore the converted data:
+
+```ruby
+restorer = TypedData::Restorer.new(schema)
+restorer.restore({
+  "int_field" => 1,
+  "int_or_string_field" => { "string_value" => "string" },
+  "array_field" => [1, 2],
+  "union_type_array_field" => [
+    { "int_value" => 1 },
+    { "string_value" => "2" },
+  ],
+  "nested_map_field" => [
+    {
+      "key" => "nested_map",
+      "value" =>[
+        {
+          "key" => "key1",
+          "value" => { "int_value" => 1 }
+        },
+        {
+          "key" => "key2",
+          "value" => { "string_value" => "2"}
+        },
+      ],
+    },
+  ],
+})
+#=> {"int_field"=>1,
+#    "int_or_string_field"=>"string",
+#    "array_field"=>[1, 2],
+#    "union_type_array_field"=>[1, "2"],
+#    "nested_map_field"=>{"nested_map"=>{"key1"=>1, "key2"=>"2"}}}
+```
+
 
 ## Development
 
