@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 require "time"
+require "typed_data/key_formatter"
 require "typed_data/schema"
 
 module TypedData
   class Restorer
-    attr_accessor :union_type_key_formatter
-
     # @param schema [Hash] an Avro schema
-    def initialize(schema)
+    # @param key_formatter [Symbol]
+    def initialize(schema, key_formatter: :bigquery)
       @schema = Schema.new(schema)
-      @union_type_key_formatter = ->(type) { "#{type}_value" }
+      @union_type_key_formatter = KeyFormatter.find(key_formatter)
     end
 
     # @param data [Hash]
@@ -109,7 +109,7 @@ module TypedData
 
         k = value_without_nil.keys.first
         v = value_without_nil.values.first
-        element_type = types.find { |t| k == union_type_key_formatter.call(t.to_s) }
+        element_type = types.find { |t| k == @union_type_key_formatter.call(t.to_s) }
         element_type.accept(self, v)
       end
     end

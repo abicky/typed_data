@@ -1,0 +1,1 @@
+{"int_field":1,"int_or_string_field":"string","array_field":[1,2],"union_type_array_field":[1,"2"],"nested_map_field":{"nested_map":{"key1":1,"key2":"2"}}}

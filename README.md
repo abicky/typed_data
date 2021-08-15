@@ -23,6 +23,8 @@ Or install it yourself as:
 
 ## Usage
 
+### Use as Ruby library
+
 ```ruby
 require "typed_data"
 
@@ -89,11 +91,12 @@ converter.convert({
 #         {"key"=>"key2", "value"=>{"string_value"=>"2"}}]}]}
 ```
 
-You can specify a formatter for the union type keys. For example, the formatter for tables managed by [Google BigQuery Sink Connector](https://docs.confluent.io/current/connect/kafka-connect-bigquery/index.html) is like below:
+You can specify the formatter for union type keys. The default formatter is `:bigquery`, which is used for BigQuery tables created by loading Avro data for the first time.
+The other formatter is `:avro`, the formatter for the Avro JSON encoding, which is used in tables managed by [Google BigQuery Sink Connector](https://docs.confluent.io/current/connect/kafka-connect-bigquery/index.html):
+
 
 ```ruby
-converter = TypedData::Converter.new(schema)
-converter.union_type_key_formatter = ->(type) { type.split("_").first }
+converter = TypedData::Converter.new(schema, key_formatter: :avro)
 converter.convert({
   "int_field" => 1,
   "int_or_string_field" => "string",
@@ -150,6 +153,49 @@ restorer.restore({
 #    "array_field"=>[1, 2],
 #    "union_type_array_field"=>[1, "2"],
 #    "nested_map_field"=>{"nested_map"=>{"key1"=>1, "key2"=>"2"}}}
+```
+
+### Use as CLI
+
+```
+$ typed-data help
+Commands:
+  typed-data convert [file] --schema=SCHEMA  # Convert data in an encoding similar to Avro JSON encoding
+  typed-data help [COMMAND]                  # Describe available commands or one specific command
+  typed-data restore [file] --schema=SCHEMA  # Restore converted data
+
+$ typed-data help convert
+Usage:
+  typed-data convert [file] --schema=SCHEMA
+
+Options:
+  --schema=SCHEMA        # Path to Avro schema file
+  [--key-format=FORMAT]  # Format for union type key
+                         # Default: bigquery
+                         # Possible values: bigquery, avro
+
+Description:
+  This command converts data in an encoding similar to Avro JSON encoding. You can specify the file in
+  JSON format or JSON Lines format. If the file option is ommited, the command read data from stdin.
+$ typed-data help restore
+Usage:
+  typed-data restore [file] --schema=SCHEMA
+
+Options:
+  --schema=SCHEMA        # Path to Avro schema file
+  [--key-format=FORMAT]  # Format for union type key
+                         # Default: bigquery
+                         # Possible values: bigquery, avro
+
+Description:
+  This command restores converted data. You can specify the file in JSON format or JSON Lines format. If
+  the file option is ommited, the command read data from stdin.
+```
+
+For example, you can restore the data loaded into a BigQuery table like below:
+
+```
+$ bq query --format json 'SELECT * FROM <table>' | typed-data restore --schema /path/to/avsc
 ```
 
 

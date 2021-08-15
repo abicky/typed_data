@@ -1,0 +1,4 @@
+#!/usr/bin/env ruby
+require "typed_data/cli"
+
+TypedData::CLI.start(ARGV)

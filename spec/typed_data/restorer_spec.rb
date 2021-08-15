@@ -6,7 +6,8 @@ require "spec_helper"
 RSpec.describe TypedData::Restorer do
   describe "#restore" do
     subject(:restored_data) { restorer.restore(data) }
-    let(:restorer) { described_class.new(JSON.parse(schema_file)) }
+    let(:restorer) { described_class.new(JSON.parse(schema_file), key_formatter: key_formatter) }
+    let(:key_formatter) { :bigquery }
 
     let(:schema_file) do
       File.read(File.join(__dir__, "..", "avsc", "#{schema_name}.avsc"))
@@ -339,7 +340,7 @@ RSpec.describe TypedData::Restorer do
       context "with simple union type" do
         let(:schema_name) { "complex_types_with_simple_union_type" }
 
-        context "without formatter" do
+        context "with the default formatter" do
           let(:data) do
             {
               "simple_union" => {
@@ -355,10 +356,8 @@ RSpec.describe TypedData::Restorer do
           end
         end
 
-        context "with formatter" do
-          before do
-            restorer.union_type_key_formatter = ->(type) { type.split("_").first }
-          end
+        context "with the avro formatter" do
+          let(:key_formatter) { :avro }
 
           let(:data) do
             {

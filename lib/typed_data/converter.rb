@@ -1,14 +1,19 @@
 # frozen_string_literal: true
+require "typed_data/key_formatter"
 require "typed_data/schema"
 
 module TypedData
   class Converter
-    attr_accessor :union_type_key_formatter
-
     # @param schema [Hash] an Avro schema
-    def initialize(schema)
+    # @param key_formatter [Symbol]
+    def initialize(schema, key_formatter: :bigquery)
       @schema = Schema.new(schema)
-      @union_type_key_formatter = ->(type) { "#{type}_value" }
+      @union_type_key_formatter = KeyFormatter.find(key_formatter)
+    end
+
+    def union_type_key_formatter=(formatter)
+      warn "DEPRECATION WARNING: #{__method__} is deprecated. Specify the key_formatter :avsc to TypedData::Converter.new instead."
+      @union_type_key_formatter = formatter
     end
 
     # @param data [Hash]
@@ -105,7 +110,7 @@ module TypedData
       elsif element_type.is_a?(Schema::NullType)
         {}
       else
-        { union_type_key_formatter.call(element_type.to_s) => converted_value }
+        { @union_type_key_formatter.call(element_type.to_s) => converted_value }
       end
     end
   end

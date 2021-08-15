@@ -1,0 +1,47 @@
+{
+  "name": "Record",
+  "type": "record",
+  "fields": [
+    {
+      "name": "int_field",
+      "type": "int"
+    },
+    {
+      "name": "int_or_string_field",
+      "type": [
+        "int",
+        "string"
+      ]
+    },
+    {
+      "name": "array_field",
+      "type": {
+        "type": "array",
+        "items": "int"
+      }
+    },
+    {
+      "name": "union_type_array_field",
+      "type": {
+        "type": "array",
+        "items": [
+          "int",
+          "string"
+        ]
+      }
+    },
+    {
+      "name": "nested_map_field",
+      "type": {
+        "type": "map",
+        "values": {
+          "type": "map",
+          "values": [
+            "int",
+            "string"
+          ]
+        }
+      }
+    }
+  ]
+}

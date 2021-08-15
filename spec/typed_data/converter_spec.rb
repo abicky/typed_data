@@ -6,7 +6,8 @@ require "spec_helper"
 RSpec.describe TypedData::Converter do
   describe "#convert" do
     subject(:converted_data) { converter.convert(data) }
-    let(:converter) { described_class.new(JSON.parse(schema_file)) }
+    let(:converter) { described_class.new(JSON.parse(schema_file), key_formatter: key_formatter) }
+    let(:key_formatter) { :bigquery }
 
     let(:schema_file) do
       File.read(File.join(__dir__, "..", "avsc", "#{schema_name}.avsc"))
@@ -426,7 +427,7 @@ RSpec.describe TypedData::Converter do
           }
         end
 
-        context "without formatter" do
+        context "with the default formatter" do
           it do
             expect(converted_data).to eq({
               "simple_union" => {
@@ -436,10 +437,8 @@ RSpec.describe TypedData::Converter do
           end
         end
 
-        context "with formatter" do
-          before do
-            converter.union_type_key_formatter = ->(type) { type.split("_").first }
-          end
+        context "with the avro formatter" do
+          let(:key_formatter) { :avro }
 
           it do
             expect(converted_data).to eq({
